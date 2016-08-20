@@ -23,4 +23,4 @@ class AutoTraderSpider(scrapy.Spider):
         links = response.xpath('//article/div/div[2]/div[1]/h1/a/@href').extract()
 
         for title, stat, price, link in zip(titles, stats, prices, links):
-            yield {'car': (title, stat.xpath('li/text()').extract(), price, link)}
+            yield {'car': (title, stat.xpath('li/text()').extract(), price.replace('£', '').replace(',', ''), link)}
