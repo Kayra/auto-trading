@@ -16,4 +16,9 @@ class AutoTraderSpider(scrapy.Spider):
             yield scrapy.Request(next_page_url, callback=self.parse_page)
 
     def parse_page(self, response):
-        print("HIT", response.url)
+        yield {
+            'titles': response.xpath('//article/div/div[2]/div[1]/h1/a/text()').extract(),
+            'stats': response.xpath('//article/div/div[2]/ul/li/text()').extract(),
+            'prices': response.xpath('//article/div/div[2]/div[1]/div/text()').extract(),
+            'links': response.xpath('//article/div/div[2]/div[1]/h1/a/@href').extract(),
+        }
