@@ -1,5 +1,5 @@
 import scrapy
-from utils import stats_list_to_dict, format_stats
+from utils import stats_list_to_dict, format_stats, increase_url_page_number
 
 
 class AutoTraderSpider(scrapy.Spider):
@@ -9,11 +9,7 @@ class AutoTraderSpider(scrapy.Spider):
 
     def parse(self, response):
         for page in range(99):
-            url_list = response.url.split('/')
-            page_number_index = url_list.index('page') + 1
-            next_page_number = page + 1
-            url_list[page_number_index] = str(next_page_number)
-            next_page_url = '/'.join(url_list)
+            next_page_url = increase_url_page_number(response.url, page)
             yield scrapy.Request(next_page_url, callback=self.parse_page)
 
     def parse_page(self, response):
@@ -24,9 +20,13 @@ class AutoTraderSpider(scrapy.Spider):
         links = response.xpath('//article/div/div[2]/div[1]/h1/a/@href').extract()
 
         for title, car_stats, price, link in zip(titles, stats, prices, links):
+
             car_stats = car_stats.xpath('li/text()').extract()
 
-            stats_dict = stats_list_to_dict(car_stats)
+            try:
+                stats_dict = stats_list_to_dict(car_stats)
+            except IndexError:
+                break
 
             try:
                 stats_dict = format_stats(stats_dict)
