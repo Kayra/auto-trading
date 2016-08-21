@@ -33,6 +33,8 @@ class AutoTraderSpider(scrapy.Spider):
             except ValueError:
                 break
 
-            price = price.replace('£', '').replace(',', '')
+            stats_dict['price'] = price.replace('£', '').replace(',', '')
+            stats_dict['title'] = title
+            stats_dict['link'] = link
 
-            yield {'car': (title, stats_dict, price, link)}
+            yield stats_dict
