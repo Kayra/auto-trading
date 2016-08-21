@@ -25,13 +25,7 @@ class AutoTraderSpider(scrapy.Spider):
         for title, car_stats, price, link in zip(titles, stats, prices, links):
             car_stats = car_stats.xpath('li/text()').extract()
 
-            stats_dict = dict()
-            stats_dict['year'] = car_stats[0]
-            stats_dict['style'] = car_stats[1]
-            stats_dict['milage'] = car_stats[2]
-            stats_dict['transmission'] = car_stats[3]
-            stats_dict['size'] = car_stats[4]
-            stats_dict['fuel'] = car_stats[5]
+            stats_dict = self.stats_list_to_dict(car_stats)
 
             try:
                 stats_dict = self.format_stats(stats_dict)
@@ -40,6 +34,18 @@ class AutoTraderSpider(scrapy.Spider):
 
             price = price.replace('£', '').replace(',', '')
             yield {'car': (title, stats_dict, price, link)}
+
+    def stats_list_to_dict(self, car_stats):
+
+        stats_dict = dict()
+        stats_dict['year'] = car_stats[0]
+        stats_dict['style'] = car_stats[1]
+        stats_dict['milage'] = car_stats[2]
+        stats_dict['transmission'] = car_stats[3]
+        stats_dict['size'] = car_stats[4]
+        stats_dict['fuel'] = car_stats[5]
+
+        return stats_dict
 
     def format_stats(self, stats_dict):
 
