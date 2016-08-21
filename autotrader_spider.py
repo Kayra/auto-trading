@@ -33,5 +33,14 @@ class AutoTraderSpider(scrapy.Spider):
             stats_dict['size'] = car_stats[4]
             stats_dict['fuel'] = car_stats[5]
 
+            stats_dict = self.format_stats(stats_dict)
+
             price = price.replace('£', '').replace(',', '')
             yield {'car': (title, stats_dict, price, link)}
+
+    def format_stats(self, stats_dict):
+
+        stats_dict['year'] = int(stats_dict['year'][:4])
+        stats_dict['milage'] = int(stats_dict['milage'].replace('miles', '').replace(',', '').strip())
+
+        return stats_dict
