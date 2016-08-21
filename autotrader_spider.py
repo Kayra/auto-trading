@@ -34,4 +34,5 @@ class AutoTraderSpider(scrapy.Spider):
                 break
 
             price = price.replace('£', '').replace(',', '')
+
             yield {'car': (title, stats_dict, price, link)}
