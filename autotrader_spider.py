@@ -42,5 +42,6 @@ class AutoTraderSpider(scrapy.Spider):
 
         stats_dict['year'] = int(stats_dict['year'][:4])
         stats_dict['milage'] = int(stats_dict['milage'].replace('miles', '').replace(',', '').strip())
+        stats_dict['size'] = float(stats_dict['size'].replace('L', ''))
 
         return stats_dict
