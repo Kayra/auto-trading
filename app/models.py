@@ -1,5 +1,5 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, Float
 from sqlalchemy import create_engine
 import datetime
 
@@ -10,7 +10,7 @@ Base = declarative_base()
 
 class Car(Base):
 
-    __table__ = 'cars'
+    __tablename__ = 'cars'
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
@@ -19,5 +19,10 @@ class Car(Base):
     transmission = Column(String)
     year = Column(DateTime)
     price = Column(Integer)
+    size = Column(Float)
     first_scraped = Column(DateTime, default=datetime.datetime.utcnow)
     last_scraped = Column(DateTime)
+
+
+# To create the tables, uncomment the next line and run this script
+# Base.metadata.create_all(engine)

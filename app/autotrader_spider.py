@@ -1,5 +1,13 @@
+import datetime
 import scrapy
+
+from sqlalchemy.orm import sessionmaker
+
+from models import Car, engine
 from utils import stats_list_to_dict, format_stats, increase_url_page_number
+
+Session = sessionmaker(bind=engine)
+session = Session()
 
 
 class AutoTraderSpider(scrapy.Spider):
@@ -36,5 +44,16 @@ class AutoTraderSpider(scrapy.Spider):
             stats_dict['price'] = price.replace('£', '').replace(',', '')
             stats_dict['title'] = title
             stats_dict['link'] = link
+
+            car = Car(name=stats_dict['title'],
+                      link=stats_dict['link'],
+                      milage=stats_dict['milage'],
+                      transmission=stats_dict['transmission'],
+                      year=datetime.datetime(stats_dict['year'], 1, 1),
+                      price=stats_dict['price'],
+                      size=stats_dict['size'],
+                      last_scraped=datetime.datetime.utcnow())
+            session.add(car)
+            session.commit()
 
             yield stats_dict
