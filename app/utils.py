@@ -41,7 +41,7 @@ def save_car(stats_dict):
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    car = Car.query.filter_by(name=stats_dict['title']).first()
+    car = session.query(Car).filter_by(name=stats_dict['title']).first()
 
     if car is None:
         car = Car(name=stats_dict['title'],
