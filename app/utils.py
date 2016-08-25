@@ -41,14 +41,17 @@ def save_car(stats_dict):
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    car = Car(name=stats_dict['title'],
-              link=stats_dict['link'],
-              milage=stats_dict['milage'],
-              transmission=stats_dict['transmission'],
-              year=datetime.datetime(stats_dict['year'], 1, 1),
-              price=stats_dict['price'],
-              size=stats_dict['size'],
-              last_scraped=datetime.datetime.utcnow())
+    car = Car.query.filter_by(name=stats_dict['title']).first()
+
+    if car is None:
+        car = Car(name=stats_dict['title'],
+                  link=stats_dict['link'],
+                  milage=stats_dict['milage'],
+                  transmission=stats_dict['transmission'],
+                  year=datetime.datetime(stats_dict['year'], 1, 1),
+                  price=stats_dict['price'],
+                  size=stats_dict['size'],
+                  last_scraped=datetime.datetime.utcnow())
 
     session.add(car)
     session.commit()
