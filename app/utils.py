@@ -43,7 +43,16 @@ def save_car(stats_dict):
 
     car = session.query(Car).filter_by(name=stats_dict['title']).first()
 
-    if car is None:
+    if car:
+        car.link = stats_dict['link']
+        car.milage = stats_dict['milage']
+        car.transmission = stats_dict['transmission']
+        car.year = datetime.datetime(stats_dict['year'], 1, 1)
+        car.price = stats_dict['price']
+        car.size = stats_dict['size']
+        car.last_scraped = datetime.datetime.utcnow()
+
+    elif car is None:
         car = Car(name=stats_dict['title'],
                   link=stats_dict['link'],
                   milage=stats_dict['milage'],
