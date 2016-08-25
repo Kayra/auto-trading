@@ -1,4 +1,3 @@
-import datetime
 import scrapy
 
 from utils import stats_list_to_dict, format_stats, increase_url_page_number, save_car
